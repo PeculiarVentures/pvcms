@@ -1,0 +1,40 @@
+﻿name: Pack pvcms
+on: [push]
+
+jobs:
+  macos:
+    name: Build MacOS package
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build
+        run: dotnet publish -c Release --self-contained -r osx-x64 /p:DebugType=None -o ./publish-result/osx-x64
+      - name: Create artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: MacOS x64
+          path: ./publish-result/osx-x64
+  windows:
+    name: Build Windows package
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build
+        run: dotnet publish -c Release --self-contained -r win10-x64 /p:DebugType=None -o ./publish-result/win10-x64
+      - name: Create artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: Windows x64
+          path: ./publish-result/win10-x64
+  linux:
+    name: Build Linux package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build
+        run: dotnet publish -c Release --self-contained -r linux-x64 /p:DebugType=None -o ./publish-result/linux-x64
+      - name: Create artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: Linux x64
+          path: ./publish-result/linux-x64
